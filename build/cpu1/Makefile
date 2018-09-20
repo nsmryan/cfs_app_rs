@@ -39,8 +39,8 @@
 #===============================================================================
 
 # List of apps/libs to include in the build
-THE_APPS := sample_lib sample_app
-THE_APPS += ci_lab to_lab sch_lab
+THE_APPS := rust
+THE_APPS += sch_lab
 # THE_APPS += cfs_lib
 # THE_APPS += cf cs ds fm hk hs lc md mm sc sch
 export THE_APPS
