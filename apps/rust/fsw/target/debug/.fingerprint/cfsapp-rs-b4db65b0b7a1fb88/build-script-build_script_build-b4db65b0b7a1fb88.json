@@ -1,0 +1,1 @@
+{"rustc":8427573639476503995,"features":"[]","target":13123923088509177768,"profile":3615922329004907476,"path":4820456077575211582,"deps":[["bindgen v0.26.3","bindgen",3136060247145742015]],"local":[{"MtimeBased":[[1537154373,318662245],".fingerprint/cfsapp-rs-b4db65b0b7a1fb88/dep-build-script-build_script_build-b4db65b0b7a1fb88"]}],"rustflags":[],"edition":"Edition2015"}

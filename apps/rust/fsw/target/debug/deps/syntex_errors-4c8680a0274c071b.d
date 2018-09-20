@@ -1,0 +1,12 @@
+/home/noah/Documents/cFE/apps/rust/fsw/target/debug/deps/libsyntex_errors-4c8680a0274c071b.rlib: /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/lib.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/diagnostic.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/diagnostic_builder.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/emitter.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/snippet.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/registry.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/styled_buffer.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/lock.rs
+
+/home/noah/Documents/cFE/apps/rust/fsw/target/debug/deps/syntex_errors-4c8680a0274c071b.d: /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/lib.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/diagnostic.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/diagnostic_builder.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/emitter.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/snippet.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/registry.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/styled_buffer.rs /home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/lock.rs
+
+/home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/lib.rs:
+/home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/diagnostic.rs:
+/home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/diagnostic_builder.rs:
+/home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/emitter.rs:
+/home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/snippet.rs:
+/home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/registry.rs:
+/home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/styled_buffer.rs:
+/home/noah/.cargo/registry/src/github.com-1ecc6299db9ec823/syntex_errors-0.58.1/src/lock.rs:
