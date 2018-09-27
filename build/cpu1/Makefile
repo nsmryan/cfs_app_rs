@@ -40,13 +40,13 @@
 
 # List of apps/libs to include in the build
 THE_APPS := rust
-THE_APPS += sch_lab
+THE_APPS += sch
 # THE_APPS += cfs_lib
 # THE_APPS += cf cs ds fm hk hs lc md mm sc sch
 export THE_APPS
 
 # List of apps that include tables for the build
-THE_TBLS := 
+THE_TBLS := sch
 #THE_TBLS += ds fm hk lc sc sch
 #THE_TBLS += cf hs 
 export THE_TBLS

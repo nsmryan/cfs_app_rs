@@ -19,17 +19,23 @@ const RUST_APPMAIN_PERF_ID : uint32 = 0x8888;
 // Time to wait for system to start
 const RUST_STARTUP_SYNC_TIMEOUT : uint32 = 65000;
 
-const RUST_HK_TLM_MID : uint16 = 0x8888;
+const RUST_HK_TLM_MID : uint16 = 0x18fA;
 
 const RUST_CMD_PIPE_DEPTH : uint16 = 10;
 
 const RUST_CMD_PIPE_NAME : &str = "RustTlm";
 
-const RUST_SEND_HK_MID : uint16 = 0x8889;
+const RUST_SEND_HK_MID : uint16 = 0x18f9;
 
 const RUST_APP_INF_EID : u16 = 0x8888;
 
 
+// The App's housekeeping packet. This is defined with
+// repr(C) to be consistent with structs in the main CFS code.
+//
+// The TlmHeader ensures that there is space for a CCSDS Primary
+// Header, as this struct describes the entire packet, including
+// the header.
 #[repr(C)]
 struct RustTlm {
     pub TlmHeader: [uint8; 12usize],
@@ -53,19 +59,26 @@ impl Default for RustTlm {
     }
 }
 
-
+// wrapper around per log add, which is defined as a 
+// macro in the C code.
 fn CFE_ES_PerfLogEntry(perf_id : uint32) {
     unsafe {
         CFE_ES_PerfLogAdd(perf_id, 0);
     }
 }
 
+// wrapper around per log exit, which is defined as a 
+// macro in the C code.
 fn CFE_ES_PerfLogExit(perf_id : uint32) {
     unsafe {
         CFE_ES_PerfLogAdd(perf_id, 1);
     }
 }
 
+/// This function is the main entry point into this module.
+/// When the object file is loaded by cFE at startup, this is
+/// the function is will call. This requires configuring 
+/// the cfe_es_startup.scr file to load the Rust App.
 #[no_mangle]
 pub extern fn Rust_AppInit() {
     let mut run_status : uint32 = CFE_ES_RUNSTATUS_APP_RUN;
@@ -73,10 +86,15 @@ pub extern fn Rust_AppInit() {
     let mut status = 0;
 
     let mut tlm_packet : RustTlm = Default::default();
+
+    // we need a pointer to a pointer to receive a buffer from the
+    // SB module.
     let mut rcv_packet : *mut CFE_SB_MsgPtr_t = 0 as *mut CFE_SB_MsgPtr_t;
 
     let mut cmd_pipe : CFE_SB_PipeId_t = 0;
 
+    // This whole thing is wrapped in unsafe, as all calls to the C
+    // bindings are unsafe.
     unsafe {
         // log initialization to perf monitoring
         CFE_ES_PerfLogEntry(RUST_APPMAIN_PERF_ID);
@@ -105,9 +123,9 @@ pub extern fn Rust_AppInit() {
                        TRUE as u8);
 
         // return should be checked before cast to u8
-        cmd_pipe = CFE_SB_CreatePipe(mem::transmute(&mut tlm_packet),
+        status = CFE_SB_CreatePipe(mem::transmute(&mut cmd_pipe),
                                    RUST_CMD_PIPE_DEPTH,
-                                   RUST_CMD_PIPE_NAME.as_ptr() as *const i8) as CFE_SB_PipeId_t;
+                                   RUST_CMD_PIPE_NAME.as_ptr() as *const i8);
         status = CFE_SB_Subscribe(RUST_SEND_HK_MID, cmd_pipe);
 
         // Don't start main loop until the rest of the system is ready!
@@ -117,11 +135,11 @@ pub extern fn Rust_AppInit() {
     while run_status == CFE_ES_RUNSTATUS_APP_RUN {
         unsafe {
             CFE_ES_PerfLogExit(RUST_APPMAIN_PERF_ID);
-            println!("Hello, CFS!");
 
+            // wait for a command, or a message asking for a housekeeping packet
             status = CFE_SB_RcvMsg(mem::transmute(&mut rcv_packet),
                                    cmd_pipe,
-                                   CFE_SB_POLL as i32);
+                                   CFE_SB_PEND_FOREVER as i32);
 
             if status == CFE_SUCCESS as i32 {
                 tlm_packet.cmd_received_counter += 1;
@@ -133,16 +151,14 @@ pub extern fn Rust_AppInit() {
                                RUST_HK_TLM_MID,
                                mem::size_of::<RustTlm>() as uint16,
                                TRUE as u8);
-
                 CFE_SB_TimeStampMsg(mem::transmute(&mut tlm_packet));
-
                 CFE_SB_SendMsg(mem::transmute(&mut tlm_packet));
-              
+
                 CFE_EVS_SendEvent(RUST_APP_INF_EID, CFE_EVS_INFORMATION as u16, "Rust telemetry sent".as_ptr() as *const i8);
             }
             else
             {
-                CFE_EVS_SendEvent(RUST_APP_INF_EID, CFE_EVS_INFORMATION as u16, "Rust Command Error %d 0x%04X ".as_ptr() as *const i8, status);
+                CFE_EVS_SendEvent(RUST_APP_INF_EID, CFE_EVS_INFORMATION as u16, "Rust Command Error %d 0x%08X ".as_ptr() as *const i8, status, status);
                 OS_TaskDelay(1000);
             }
 
@@ -157,8 +173,4 @@ pub extern fn Rust_AppInit() {
         // report app exit before exiting
         CFE_ES_ExitApp(run_status);
     }
-}
-
-#[cfg(test)]
-mod tests {
 }
