@@ -30,6 +30,20 @@ const RUST_SEND_HK_MID : uint16 = 0x18f9;
 const RUST_APP_INF_EID : u16 = 0x8888;
 
 
+// The App's global data. This is a convention in
+// CFS code where all data related to an App is contained
+// in a single struct.
+pub struct RustAppData {
+    run_status : uint32,
+
+    app_id : uint32,
+
+    tlm_packet : RustTlm,
+
+    // pipe used to receive command packets.
+    cmd_pipe : CFE_SB_PipeId_t,
+}
+
 // The App's housekeeping packet. This is defined with
 // repr(C) to be consistent with structs in the main CFS code.
 //
@@ -81,17 +95,16 @@ fn CFE_ES_PerfLogExit(perf_id : uint32) {
 /// the cfe_es_startup.scr file to load the Rust App.
 #[no_mangle]
 pub extern fn Rust_AppInit() {
-    let mut run_status : uint32 = CFE_ES_RUNSTATUS_APP_RUN;
-    let mut app_id = 0;
     let mut status = 0;
 
+    let mut run_status : uint32 = CFE_ES_RUNSTATUS_APP_RUN;
+    let mut app_id = 0;
     let mut tlm_packet : RustTlm = Default::default();
+    let mut cmd_pipe : CFE_SB_PipeId_t = 0;
 
     // we need a pointer to a pointer to receive a buffer from the
     // SB module.
     let mut rcv_packet : *mut CFE_SB_MsgPtr_t = 0 as *mut CFE_SB_MsgPtr_t;
-
-    let mut cmd_pipe : CFE_SB_PipeId_t = 0;
 
     // This whole thing is wrapped in unsafe, as all calls to the C
     // bindings are unsafe.
